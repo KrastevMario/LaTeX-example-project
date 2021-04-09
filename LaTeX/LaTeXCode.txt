@@ -1,0 +1,340 @@
+\documentclass[12pt]{article}
+%librerie 
+\usepackage[table, x11names]{xcolor}
+\usepackage{multirow}
+\usepackage[italian]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{indentfirst}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xcolor}
+\usepackage{minted}
+\usepackage{wrapfig}
+\usepackage{attachfile}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+
+\title{
+\includegraphics[width=20mm]{images/logo.jpg}\\
+  {\large\textsc{IIS ``L.\,Cerebotani''}}\\
+  \textit{Esame di Stato 2019/2020}\\
+  \textit{Elaborato di Informatica e Sistemi e Reti}\\
+  \textit{Classe 5$^a$E}\\
+  \textit{Candidato Mario Martinov Krastev}\\
+  \textsf{\textbf{Sistema informatico per la gestione della logistica cittadina}} 
+  %sf-->sans serif
+  %it-->italic
+  %small caps
+  %bf-->BOLD
+}
+
+
+
+\date{}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+\newpage
+
+
+\section{Il progetto}
+
+\subsection{Analisi dei requisiti}
+Una città ha avviato un progetto per lo spostamento delle merci usando veicoli elettrici all'interno del centro storico per ridurre l'inquinamento e la congestione della viabilità urbana. Per una gestione ottimizzata delle merci che entrano ed escono dal paese è stato realizzato un hub dove convergono tutti i colli che devono essere consegnati con i camioncini elettrici in città.
+
+\medskip
+La piattaforma che verrà sviluppata avrà il compito di gestire i dati necessari per la pianificazione del servizio di consegna, di monitorare la posizione dei veicoli elettrici e il magazzino temporaneo dove arrivano le merci. In particolare raccoglierà la posizione in tempo reale dei furgoncini (fornite da un modulo sviluppato da un'azienda di software) e disporrà di un'interfaccia grafica per tracciare i pacchi che stanno trasportando e per controllare il loro stato (non ancora arrivate allo hub, in magazzino, in consegna, consegnate).
+Un'altra funzione che verrà implementata è la registrazione dei pacchi sulla piattaforma per chi deve spedirli in modo da essere riconosciuti una volta arrivati all'hub.
+
+
+
+\subsection{Ipotesi aggiuntive}
+Per il tracciamento dei veicoli viene salvato anche lo storico di tutti i viaggi compiuti dai camioncini per avere la possibilità in futuro di implementare qualche algoritmo di intelligenza artificiale che permetta di prevedere gli orari di consegna. Questa posizione viene inviata periodicamente da un dispositivo posto sui veicoli con il quale è anche possibile etichettare come \textit{consegnati} i pacchi caricati sul furgoncino che sono in consegna.
+
+\medskip
+La scelta del percorso verrà calcolata da un modulo acquistato da una casa di software che leggerà dal database la lista di destinazioni delle consegne che devono essere effettuate, per poi trovare il tragitto migliore.
+
+\medskip
+Durante la registrazione di un collo sul portale, l'operatore del settore deve selezionare il destinatario da una lista di esercizi commerciali registrati sulla piattaforma con gli indirizzi già precompilati dagli stessi. Questo costringe i negozi che devono ricevere pacchi a doversi iscrivere sul sito ma dà la possibilità al comune di offrire ulteriori servizi in futuro agli utenti già registrati.
+
+
+
+\subsection{Statistiche}
+%\textbf{Consegna:} Allo scopo di analizzare i dati di funzionamento del servizio di consegna delle merci in un periodo temporale si vuole conoscere il numero di consegne medio per i singoli giorni della settimana (Lunedì, Martedì, ...) per i diversi settori della città identificati dal CAP: come è possibile determinarlo?
+
+È stata prevista la possibilità di analizzare i dati di funzionamento del servizio di consegna in base ad un dato periodo teporale. Per avere questa funzionalità è stato necessario aggiungere la data di consegna di un collo sul database: infatti con questa modifica si può calcolare una media di consegne divise, per esempio, per giorno della settimana. Si possono raggruppare queste medie anche in base al CAP di ogni destinatario per avere una visione d'insieme del corretto funzionamento del servizio di consegna diviso per ogni settore della città.
+
+
+
+\subsection{Limitazione visualizzazione colli}
+%\textbf{Consegna:} Volendo, per motivi di sicurezza, limitare la visualizzazione ai soli colli spediti dall’operatore o attesi dall’esercizio che effettua la ricerca, quali soluzioni tecnologiche sono possibili?
+
+È stato previsto un sistema di autenticazione per le aziende, sia che ricevono i colli, sia che li spediscono, che permette di capire chi sta facendo la ricerca. In questo modo, nella pagina web dove si vedrà la lista delle spedizioni, il sito filtrerà in automatico le consegne rimuovendo quelle di cui l'utente loggato non rappresenta nè il destinatario, nè il mittente. Grazie a questa implementazione, la pagina conterrà solo le informazioni utili per chi sta utilizzando la piattaforma, senza dover cercare attraverso un codice ogni collo che deve essere ricevuto.
+
+%Per la limitazione e la difesa dei dati dei clienti useremo una pagina di login che solo la persona con le credenziali giuste (le sue) puo vedere solo i dati dei suoi colli e non avra la possibilita di vedere gli altri. Per tenere una sicurezza maggiore contro attacchi hacker verso il database useremo il linguaggio di programmazione PHP. Vogliamo evitare attacchi come \textit{Sql Injection} per questo il login verra creato con cautela e non permettera dei simboli strani che potranno creare dei problemi alla base di dati. Esistono degli attacchi DOS che possono tirare giu dei website per questo prima di pubblicare il sito dovremo aver configurato il firewall con cautela. Per la criptazione di dati mentre viaggiano metteremo il certificato SSL che ci garantisce che i dati viaggeranno in sicuro ed evitare lo sniffing dei pacchetti o anche magari lo spoofing ed altri problemi. 
+
+
+\section{Database}
+
+\subsection{Schema E/R}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\linewidth]{images/ERDiagram.png}
+    \caption{Schema ER}
+    \label{fig:ergas}
+\end{figure}
+
+\subsection{Regole di lettura}
+\begin{itemize}
+
+    %collo azienda
+    \item \textbf{Ogni} azienda \textbf{può} \textit{avere} \textbf{uno o più} colli
+    \item \textbf{Ogni} collo \textbf{deve} \textit{essere} di \textbf{una o più} aziende 
+    
+    %collo stato
+    \item \textbf{Ogni} collo \textbf{deve} \textit{possedere} \textbf{un solo} stato
+    \item \textbf{Ogni} stato \textbf{può} \textit{essere}  di \textbf{uno o più} colli
+    
+    %collo viaggio
+    \item \textbf{Ogni} collo \textbf{deve} \textit{avere} \textbf{un solo} viaggio
+    \item \textbf{Ogni} viaggio \textbf{può} \textit{avere}  \textbf{uno o più} colli
+    
+    %posizione viaggio
+    \item \textbf{Ogni} viaggio \textbf{può} \textit{avere} \textbf{una o più} posizioni
+    \item \textbf{Ogni} posizione \textbf{deve} \textit{essere}  di \textbf{un solo} viaggio
+    
+    %azienda tipo_azienda
+    \item \textbf{Ogni} tipo\_azienda \textbf{può} \textit{avere} \textbf{una o più} aziende
+    \item \textbf{Ogni} azienda \textbf{deve} \textit{appartenere} ad \textbf{un solo} tipo\_azienda
+    
+    %viaggio veicolo
+    \item \textbf{Ogni} viaggio \textbf{deve} \textit{avere} \textbf{un solo} veicolo
+    \item \textbf{Ogni} veicolo \textbf{può} \textit{essere}  di \textbf{uno o più} viaggi
+    
+    %modello veicolo
+    \item \textbf{Ogni} veicolo \textbf{deve} \textit{possedere} \textbf{un solo} modello
+    \item \textbf{Ogni} modello \textbf{può} \textit{essere} di \textbf{uno o più} veicoli
+    
+    %modello marca
+    \item \textbf{Ogni} modello \textbf{deve} \textit{possedere} \textbf{una sola} marca
+    \item \textbf{Ogni} marca \textbf{deve} \textit{essere}  di \textbf{uno o più} veicoli
+\end{itemize}
+
+\subsection{Tabella degli attributi}
+
+
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+\rowcolor{SeaGreen3!30!}
+\textbf{Entità}        & \textbf{Attributo} & \textbf{Tipo} & \textbf{Obbligatorio} & \textbf{Valore di default} \\ \hline
+                       & peso              & double       & No                    & -                          \\ \cline{2-5} 
+                       & consegna\_da           & date       & Si                    & -                          \\ \cline{2-5} 
+                                              & consegna\_a              & date       & Si                    & -                          \\ \cline{2-5} 
+                                                                     & larghezza              & double       & No                    & -                          \\ \cline{2-5} 
+                                                                                            & altezza              &  double       & No                    & -                          \\ \cline{2-5} 
+                                                                                                                   & profondita              & double       & No                    & -                          \\ \cline{2-5} 
+
+\multirow{-7}{*}{Collo}                                                                                                                                           & consegnato              & date       & No                    & -                          \\ 
+\cline{2-5} 
+
+\hline
+                       & email              & 20 char       & Si                    & -                          \\ \cline{2-5} 
+                       & password          & 41 char       & Si                    & -                          \\ \cline{2-5} 
+                                              &
+                                    nome            & 64 char       & Si                    & -                          \\ \cline{2-5} 
+                                                                     & indirizzo              & 40 char       & Si                    & -                          \\ \cline{2-5} 
+                                                                                            & numero\_indirizzo              &  8 char       & Si                    & -                          \\ \cline{2-5} 
+                                                                                                                   & cap              & 5 char       & Si                    & -                          \\ \cline{2-5} 
+
+\multirow{-7}{*}{Azienda}                                                                                                                                           & citta              & 35 char       & Si                    & -                          \\ 
+\hline
+                       & latitudine               & double       & Si                    & -                          \\ \cline{2-5} 
+\multirow{-2}{*}{Posizione} & longitudine        & double     & Si                    & -                          \\ \hline
+Veicolo                   & targa               & 8 char       & Si                    & -                          \\ \hline
+Modello                   & nome               & 45 char       & Si                    & -                          \\ \hline
+Marca                   & nome               & 45 char       & Si                    & -                          \\ \hline
+Stato                   & descrizione               & 15 char       & Si                    & -                          \\ \hline
+Tipo\_azienda                   & nome               & 32 char       & Si                    & -                          \\ \hline
+\end{tabular}
+
+
+\subsection{Schema relazionale}
+Sono state già aggiunte le chiavi primarie artificiali necessarie per identificare univocamente le relazioni. Si indicano le \textbf{chiavi primarie} e le \textit{chiavi esterne}.
+
+
+tipo\_azienda (\textbf{id}, nome)
+
+azienda (\textbf{id}, email, password, nome, indirizzo, numero\_indirizzo, cap, citta, \textit{tipo\_utente\_id})
+
+collo (\textbf{id}, peso, consegna\_da, consegna\_a, larghezza, altezza, profondita, \textit{viaggio\_id}, consegnato, \textit{stato\_id})
+
+azienda\_has\_collo (\textit{azienda\_id}, \textit{collo\_id})
+
+stato (\textbf{id}, \textit{camioncino\_id})
+
+viaggio (\textbf{id}, nome)
+
+posizione (\textbf{id}, latitudine, longitudine, \textit{viaggio\_id})
+
+veicolo (\textbf{id}, targa, \textit{modello\_id})
+
+modello (\textbf{id}, nome, \textit{marca\_id})
+
+marca (\textbf{id}, nome)
+
+\subsection{Creazione del database in linguaggio SQL}
+\begin{minted}{mysql}{
+
+/* creamo la tabella azienda con le varie chiavi */
+CREATE TABLE `azienda` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(64) NOT NULL,
+  `password` varchar(41) NOT NULL,
+  `nome` varchar(64) NOT NULL,
+  `indirizzo` varchar(40) NOT NULL,
+  `tipo_utente_id` int(11) NOT NULL,
+  `numero_indirizzo` varchar(8) NOT NULL,
+  `cap` varchar(5) NOT NULL,
+  `citta` varchar(35) NOT NULL,
+  PRIMARY KEY (`id`,`tipo_utente_id`),
+  KEY `fk_utente_tipo_utente1_idx` (`tipo_utente_id`),
+  CONSTRAINT `fk_utente_tipo_utente1` FOREIGN KEY (`tipo_utente_id`) 
+  REFERENCES `tipo_azienda` (`id`)
+)
+
+/* 
+creamo la tabella azienda_has_collo con le varie chiavi 
+(si crea perchè abbiamo una relazione molti a molti)
+*/
+CREATE TABLE `azienda_has_collo` (
+  `azienda_id` int(11) NOT NULL,
+  `Collo_id` int(11) NOT NULL,
+  PRIMARY KEY (`azienda_id`,`Collo_id`),
+  KEY `fk_azienda_has_Collo_Collo1_idx` (`Collo_id`),
+  KEY `fk_azienda_has_Collo_azienda1_idx` (`azienda_id`),
+  CONSTRAINT `fk_azienda_has_Collo_Collo1` FOREIGN KEY (`Collo_id`) 
+  REFERENCES `collo` (`id`),
+  CONSTRAINT `fk_azienda_has_Collo_azienda1` 
+  FOREIGN KEY (`azienda_id`) 
+  REFERENCES `azienda` (`id`)
+)
+
+/* creamo la tabella collo con le varie chiavi */
+CREATE TABLE `collo` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `peso` double DEFAULT NULL,
+  `consegna_da` date NOT NULL,
+  `consegna_a` date NOT NULL,
+  `stato_id` int(11) NOT NULL,
+  `larghezza` double DEFAULT NULL,
+  `altezza` double DEFAULT NULL,
+  `profondita` double DEFAULT NULL,
+  `viaggio_id` int(11) NOT NULL,
+  `consegnato` date DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_Collo_stato1_idx` (`stato_id`),
+  KEY `fk_Collo_viaggio1_idx` (`viaggio_id`),
+  CONSTRAINT `fk_Collo_stato1` FOREIGN KEY (`stato_id`) 
+  REFERENCES `stato` (`id`),
+  CONSTRAINT `fk_Collo_viaggio1` FOREIGN KEY (`viaggio_id`) 
+  REFERENCES `viaggio` (`id`)
+) 
+
+/* creamo la tabella marca con le varie chiavi */
+CREATE TABLE `marca` (
+  `id` int(11) NOT NULL,
+  `nome` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) 
+
+/* creamo la tabella modello con le varie chiavi */
+CREATE TABLE `modello` (
+  `id` int(11) NOT NULL,
+  `nome` varchar(45) NOT NULL,
+  `marca_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_modello_marca1_idx` (`marca_id`),
+  CONSTRAINT `fk_modello_marca1` FOREIGN KEY (`marca_id`) 
+  REFERENCES `marca` (`id`)
+)
+
+/* creamo la tabella posizione con le varie chiavi */
+CREATE TABLE `posizione` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `latitudine` double NOT NULL,
+  `longitudine` double NOT NULL,
+  `viaggio_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_Posizione_viaggio1_idx` (`viaggio_id`),
+  CONSTRAINT `fk_Posizione_viaggio1` FOREIGN KEY (`viaggio_id`) 
+  REFERENCES `viaggio` (`id`)
+)
+
+/* creamo la tabella stato con le varie chiavi */
+CREATE TABLE `stato` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `descrizione` varchar(15) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)
+
+/* creamo la tabella tipo_azienda con le varie chiavi */
+CREATE TABLE `tipo_azienda` (
+  `id` int(11) NOT NULL,
+  `nome` varchar(32) NOT NULL,
+  PRIMARY KEY (`id`)
+)
+
+/* creamo la tabella veicolo con le varie chiavi */
+CREATE TABLE `veicolo` (
+  `id` int(11) NOT NULL,
+  `targa` varchar(8) NOT NULL,
+  `modello_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_veicolo_modello1_idx` (`modello_id`),
+  CONSTRAINT `fk_veicolo_modello1` FOREIGN KEY (`modello_id`) 
+  REFERENCES `modello` (`id`)
+)
+
+/* creamo la tabella viaggio con le varie chiavi */
+CREATE TABLE `viaggio` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `camioncino_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_viaggio_camioncino1_idx` (`camioncino_id`),
+  CONSTRAINT `fk_viaggio_camioncino1` FOREIGN KEY (`camioncino_id`) 
+  REFERENCES `veicolo` (`id`)
+)
+
+\end{minted}
+
+
+
+\section{La pagina di controllo dello stato}
+Questa pagina web verrà usata dagli operatori ed esercizi per controllare lo stato e la posizione del camioncino su cui viene trasportato il collo per la consegna. Un'implementazione futura sarà sicuramente l'aggiunta di una mappa che mostri il percorso fatto dal camioncino e la sua posizione attuale in evidenza.
+
+\newpage
+\subsection{Esempio dell'interfaccia}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=500pt, height=350pt]{images/colliWebsite.png}
+    \caption{Pagina di info del collo}
+    \label{fig:ergas}
+\end{figure}
+
+
+
+\end{document}
