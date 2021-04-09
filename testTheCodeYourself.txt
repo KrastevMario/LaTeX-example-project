@@ -1,0 +1,3 @@
+The code can be compiled by any online/offline LaTeX compiler. I'd reccomend to use OverLeaf because it is user-friendly and free.
+Just copy the code, put it in the compiler and compile. The photos won't show up because they are not in the source but you can replace them with your own ones
+and changing the path from the source code.
